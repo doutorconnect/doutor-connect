@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "professionals": "Professionals",
+    "howItWorks": "How it works",
+    "plans": "Plans",
+    "login": "Log in",
+    "createProfile": "Create professional profile"
+  },
+  "home": {
+    "eyebrow": "Mental health, without borders",
+    "headline": "Find the right professional, wherever you are",
+    "subheadline": "Doutor Connect connects patients to verified psychologists and psychiatrists, in Portuguese, English, Spanish, French and Italian.",
+    "ctaPrimary": "Find a professional",
+    "ctaSecondary": "Create professional profile",
+    "trustBadges": ["Online sessions", "International care", "Privacy guaranteed"],
+    "benefitsTitle": "Why Doutor Connect",
+    "featuredTitle": "Featured professionals",
+    "howItWorksTitle": "How it works"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  }
+}

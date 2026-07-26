@@ -1,0 +1,234 @@
+// Doutor Connect — schema de banco de dados
+// Rode "npm run db:push" depois de configurar DATABASE_URL no .env
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  PATIENT
+  PROFESSIONAL
+  ADMIN
+}
+
+enum PlanTier {
+  BASIC
+  PREMIUM
+}
+
+enum BillingCycle {
+  MONTHLY
+  QUARTERLY
+}
+
+enum SubscriptionStatus {
+  PENDING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  EXPIRED
+}
+
+enum ProfileStatus {
+  DRAFT
+  IN_REVIEW
+  PUBLISHED
+  REJECTED
+}
+
+enum AppointmentStatus {
+  REQUESTED
+  ACCEPTED
+  DECLINED
+  COMPLETED
+  CANCELED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  name          String
+  phone         String?
+  role          UserRole  @default(PATIENT)
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  professional Professional?
+  patient      Patient?
+}
+
+// --- Catálogos administráveis pelo painel (sem código) ---
+
+model Category {
+  id             String          @id @default(cuid())
+  name           String
+  slug           String          @unique
+  professionals  Professional[]  @relation("ProfessionalCategories")
+}
+
+model Specialty {
+  id            String         @id @default(cuid())
+  name          String
+  slug          String         @unique
+  professionals Professional[] @relation("ProfessionalSpecialties")
+}
+
+model Language {
+  id            String         @id @default(cuid())
+  name          String
+  code          String         @unique // pt, en, es, fr, it...
+  professionals Professional[] @relation("ProfessionalLanguages")
+}
+
+model Audience {
+  id            String         @id @default(cuid())
+  name          String // ex: Adultos, Adolescentes, Casais
+  professionals Professional[] @relation("ProfessionalAudiences")
+}
+
+model Country {
+  id            String         @id @default(cuid())
+  name          String
+  code          String         @unique
+  professionals Professional[]
+}
+
+// --- Profissional ---
+
+model Professional {
+  id              String        @id @default(cuid())
+  userId          String        @unique
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  photoUrl        String?
+  displayName     String?
+  licenseNumber   String? // Registro profissional (ex: CRP)
+  bio             String?       @db.Text
+  approach        String? // Abordagem terapêutica
+  sessionPrice    Decimal?      @db.Decimal(10, 2)
+  currency        String        @default("BRL")
+  sessionMinutes  Int           @default(50)
+  timezone        String        @default("America/Sao_Paulo")
+
+  countryId       String?
+  country         Country?      @relation(fields: [countryId], references: [id])
+
+  categories      Category[]    @relation("ProfessionalCategories")
+  specialties     Specialty[]   @relation("ProfessionalSpecialties")
+  languages       Language[]    @relation("ProfessionalLanguages")
+  audiences       Audience[]    @relation("ProfessionalAudiences")
+
+  profileStatus   ProfileStatus @default(DRAFT)
+  profileProgress Int           @default(0) // % exibido na barra de progresso
+  isVerified      Boolean       @default(false) // selo "Perfil Verificado" (manual, pelo admin)
+
+  subscription    Subscription?
+  availability    AvailabilitySlot[]
+  appointments    Appointment[]
+  clinicalNotes   ClinicalNote[]
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Patient {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  country   String?
+  language  String?
+  createdAt DateTime @default(now())
+
+  appointments Appointment[]
+}
+
+// --- Planos e assinaturas ---
+
+model Plan {
+  id            String         @id @default(cuid())
+  tier          PlanTier
+  billingCycle  BillingCycle
+  name          String
+  priceCents    Int
+  currency      String         @default("BRL")
+  active        Boolean        @default(true)
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  professionalId       String             @unique
+  professional         Professional       @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  planId               String
+  plan                 Plan               @relation(fields: [planId], references: [id])
+  status               SubscriptionStatus @default(PENDING)
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  currentPeriodEnd     DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+}
+
+// --- Agenda e agendamentos ---
+
+model AvailabilitySlot {
+  id             String       @id @default(cuid())
+  professionalId String
+  professional   Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  weekday        Int // 0 = domingo ... 6 = sábado
+  startTime      String // "09:00"
+  endTime        String // "12:00"
+}
+
+model Appointment {
+  id             String            @id @default(cuid())
+  professionalId String
+  professional   Professional      @relation(fields: [professionalId], references: [id])
+  patientId      String
+  patient        Patient           @relation(fields: [patientId], references: [id])
+  scheduledFor   DateTime
+  status         AppointmentStatus @default(REQUESTED)
+  patientMessage String?           @db.Text
+  createdAt      DateTime          @default(now())
+}
+
+// --- Ferramentas Premium (prontuário) ---
+
+model ClinicalNote {
+  id             String       @id @default(cuid())
+  professionalId String
+  professional   Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  patientLabel   String // referência não identificável fora do contexto clínico do profissional
+  content        String       @db.Text
+  aiSummary      String?      @db.Text // organização assistida por IA — nunca diagnóstico
+  createdAt      DateTime     @default(now())
+}
+
+// --- CMS: conteúdo editável pelo administrador, sem código ---
+
+model SiteContent {
+  id        String   @id @default(cuid())
+  key       String // ex: "home.hero.image", "footer.instagram"
+  locale    String // pt, en, es, fr, it
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@unique([key, locale])
+}
+
+model SiteSettings {
+  id            String  @id @default("singleton")
+  logoLightUrl  String?
+  logoDarkUrl   String?
+  faviconUrl    String?
+  primaryColor  String  @default("#0B1F3A")
+  accentColor   String  @default("#2452FF")
+  defaultLocale String  @default("pt")
+}

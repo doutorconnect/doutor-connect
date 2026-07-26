@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "professionals": "Profissionais",
+    "howItWorks": "Como funciona",
+    "plans": "Planos",
+    "login": "Entrar",
+    "createProfile": "Criar perfil profissional"
+  },
+  "home": {
+    "eyebrow": "Saúde mental, sem fronteiras",
+    "headline": "Encontre o profissional certo, onde quer que você esteja",
+    "subheadline": "Doutor Connect conecta pacientes a psicólogos e psiquiatras verificados, em português, inglês, espanhol, francês e italiano.",
+    "ctaPrimary": "Encontrar profissional",
+    "ctaSecondary": "Criar perfil profissional",
+    "trustBadges": ["Consulta online", "Atendimento internacional", "Privacidade garantida"],
+    "benefitsTitle": "Por que o Doutor Connect",
+    "featuredTitle": "Profissionais em destaque",
+    "howItWorksTitle": "Como funciona"
+  },
+  "footer": {
+    "rights": "Todos os direitos reservados."
+  }
+}
