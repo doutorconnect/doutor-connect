@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { SiteHeader } from '@/components/site-header';
 import { GlobalAvailabilityCard } from '@/components/global-availability-card';
+import { HeroIllustration } from '@/components/hero-illustration';
 import { getContent } from '@/lib/cms';
 import ptDefaults from '@/messages/pt.json';
 
@@ -42,7 +43,7 @@ export default async function HomePage() {
                 'radial-gradient(60% 50% at 15% 20%, rgba(36,82,255,0.35), transparent), radial-gradient(50% 40% at 90% 10%, rgba(36,82,255,0.2), transparent)'
             }}
           />
-          <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-24 md:grid-cols-2 md:items-center md:py-32">
+          <div className="relative mx-auto grid max-w-6xl gap-12 px-6 pb-32 pt-24 md:grid-cols-2 md:items-center md:py-32">
             <div>
               <p className="mb-4 inline-flex rounded-full border border-white/15 px-3 py-1 text-xs font-medium tracking-wide text-white/70">
                 Saúde mental, sem fronteiras
@@ -74,8 +75,11 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="flex justify-center md:justify-end">
-              <GlobalAvailabilityCard />
+            <div className="relative flex justify-center md:justify-end">
+              <HeroIllustration />
+              <div className="absolute -bottom-10 -left-4 md:-left-16">
+                <GlobalAvailabilityCard />
+              </div>
             </div>
           </div>
         </section>
