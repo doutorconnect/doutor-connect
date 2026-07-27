@@ -1,23 +1,45 @@
 import Link from 'next/link';
+import {
+  Brain,
+  Leaf,
+  Sparkles,
+  Users,
+  ShieldCheck,
+  CalendarCheck,
+  Heart,
+  Frown,
+  MessageCircleHeart
+} from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
 import { HeroIllustration } from '@/components/hero-illustration';
 import { getContent } from '@/lib/cms';
 import ptDefaults from '@/messages/pt.json';
 
-const benefits = [
-  { title: 'Consulta online', desc: 'Sessões por vídeo direto do navegador, sem instalar nada.' },
-  { title: 'Profissionais verificados', desc: 'Registro profissional conferido manualmente pela nossa equipe.' },
-  { title: 'Atendimento internacional', desc: 'Encontre profissionais em qualquer país e fuso horário.' },
-  { title: 'Agenda fácil', desc: 'Horários sincronizados, sem trocas de mensagem para marcar.' },
-  { title: 'Diversos idiomas', desc: 'Português, inglês, espanhol, francês e italiano.' },
-  { title: 'Privacidade', desc: 'Seus dados e conversas protegidos ponta a ponta.' }
+const trustPoints = [
+  { icon: Users, label: 'Profissionais qualificados' },
+  { icon: ShieldCheck, label: 'Atendimento seguro e sigiloso' },
+  { icon: CalendarCheck, label: 'Agendamento simples e rápido' }
+];
+
+const whyCareCards = [
+  { icon: Brain, title: 'Mais equilíbrio emocional', desc: 'Lide melhor com os desafios do dia a dia.' },
+  { icon: Leaf, title: 'Mais qualidade de vida', desc: 'O bem-estar mental reflete em todas as áreas da sua vida.' },
+  { icon: Sparkles, title: 'Autoconhecimento e crescimento', desc: 'Entenda suas emoções e fortaleça sua autoestima.' },
+  { icon: Heart, title: 'Relações mais saudáveis', desc: 'Melhore sua comunicação e suas conexões com os outros.' }
+];
+
+const topics = [
+  { title: 'Ansiedade e excesso de pensamentos', desc: 'Quando a mente não desliga, conversar com um profissional pode trazer clareza.' },
+  { title: 'Autoestima e insegurança', desc: 'Cuidar de como você se percebe muda a forma como você vive suas relações.' },
+  { title: 'Tristeza e desânimo', desc: 'Buscar apoio antes que o peso emocional tome conta da sua rotina também é cuidado.' },
+  { title: 'Relacionamentos', desc: 'A terapia ajuda a entender padrões, limites, vínculos e escolhas afetivas.' }
 ];
 
 const steps = [
-  { title: 'Encontre', desc: 'Filtre por especialidade, idioma e preço até achar quem combina com você.' },
-  { title: 'Agende', desc: 'Escolha um horário disponível na agenda do profissional.' },
-  { title: 'Converse', desc: 'O profissional confirma e combina o pagamento diretamente com você.' },
-  { title: 'Continue', desc: 'Acompanhe suas sessões e histórico dentro da plataforma.' }
+  { title: 'Escolha o profissional', desc: 'Veja perfis, abordagens, idiomas e valores até achar quem combina com você.' },
+  { title: 'Agende um horário', desc: 'Escolha um horário disponível direto na agenda do profissional.' },
+  { title: 'Converse e confirme', desc: 'O profissional confirma e combina com você o formato do atendimento.' },
+  { title: 'Continue seu cuidado', desc: 'Acompanhe suas sessões e seu histórico dentro da plataforma.' }
 ];
 
 export default async function HomePage() {
@@ -35,10 +57,10 @@ export default async function HomePage() {
       <main>
         {/* Hero */}
         <section className="relative overflow-hidden bg-white dark:bg-surface-dark">
-          <div className="relative mx-auto grid max-w-6xl gap-12 px-6 pb-24 pt-20 md:grid-cols-2 md:items-center md:py-28">
+          <div className="relative mx-auto grid max-w-6xl gap-12 px-6 pb-20 pt-20 md:grid-cols-2 md:items-center md:py-28">
             <div>
               <p className="mb-5 inline-flex items-center gap-2 rounded-full bg-royal/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-royal-700">
-                <span className="text-royal">♥</span> Cuidar da mente é cuidar da vida
+                <Heart className="h-3.5 w-3.5 fill-royal text-royal" /> Cuidar da mente é cuidar da vida
               </p>
               <h1 className="font-display text-4xl font-semibold leading-tight text-navy dark:text-white md:text-5xl">
                 {headline}
@@ -61,12 +83,11 @@ export default async function HomePage() {
               </div>
 
               <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm text-ink-soft">
-                <span className="flex items-center gap-2">
-                  <span className="text-royal">◍</span> Profissionais qualificados
-                </span>
-                <span className="flex items-center gap-2">
-                  <span className="text-royal">◍</span> Atendimento seguro e sigiloso
-                </span>
+                {trustPoints.map((t) => (
+                  <span key={t.label} className="flex items-center gap-2">
+                    <t.icon className="h-4 w-4 text-royal" /> {t.label}
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -76,52 +97,55 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Benefícios */}
-        <section className="mx-auto max-w-6xl px-6 py-20">
-          <h2 className="font-display text-2xl font-semibold text-navy dark:text-white">
-            Por que o Doutor Connect
-          </h2>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {benefits.map((b) => (
-              <div
-                key={b.title}
-                className="rounded-xl2 border border-navy-100 p-6 transition hover:border-royal/40 hover:shadow-md dark:border-white/10"
-              >
-                <h3 className="font-display text-lg font-medium text-navy dark:text-white">{b.title}</h3>
-                <p className="mt-2 text-sm text-ink-soft">{b.desc}</p>
-              </div>
-            ))}
+        {/* Por que cuidar da saúde mental */}
+        <section className="bg-surface-light py-20 dark:bg-white/5">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="max-w-xl">
+              <h2 className="font-display text-2xl font-semibold text-navy dark:text-white md:text-3xl">
+                Por que cuidar da sua saúde mental
+              </h2>
+              <p className="mt-3 text-ink-soft">
+                Cuidar da mente é essencial para viver melhor, tomar decisões com mais clareza e
+                construir relações mais saudáveis.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {whyCareCards.map((c) => (
+                <div key={c.title} className="rounded-xl2 bg-white p-6 shadow-sm dark:bg-navy-600">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-royal/10">
+                    <c.icon className="h-5 w-5 text-royal" />
+                  </div>
+                  <h3 className="mt-4 font-display text-base font-medium text-navy dark:text-white">
+                    {c.title}
+                  </h3>
+                  <p className="mt-1.5 text-sm text-ink-soft">{c.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* Profissionais em destaque — placeholder, alimentado via API/admin */}
-        <section className="bg-surface-light py-20 dark:bg-white/5">
-          <div className="mx-auto max-w-6xl px-6">
-            <div className="flex items-center justify-between">
-              <h2 className="font-display text-2xl font-semibold text-navy dark:text-white">
-                Profissionais em destaque
+        {/* Você não precisa esperar */}
+        <section className="mx-auto max-w-6xl px-6 py-20">
+          <div className="grid gap-10 md:grid-cols-2 md:items-start">
+            <div>
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-royal/10">
+                <Frown className="h-6 w-6 text-royal" />
+              </div>
+              <h2 className="font-display text-2xl font-semibold text-navy dark:text-white md:text-3xl">
+                Você não precisa esperar tudo ficar insuportável para buscar ajuda
               </h2>
-              <Link href="/profissionais" className="text-sm font-medium text-royal">
-                Ver todos →
-              </Link>
+              <p className="mt-4 text-ink-soft">
+                Terapia não é só para momentos de crise. É um espaço de cuidado e fortalecimento
+                emocional para lidar melhor com ansiedade, insegurança, sobrecarga, tristeza e as
+                mudanças da vida.
+              </p>
             </div>
-            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="rounded-xl2 border border-navy-100 bg-white p-6 dark:border-white/10 dark:bg-navy-600">
-                  <div className="h-32 w-full rounded-lg bg-navy-50 dark:bg-white/10" />
-                  <div className="mt-4 flex items-center justify-between">
-                    <p className="font-display font-medium text-navy dark:text-white">Nome do profissional</p>
-                    <span className="rounded-full bg-royal/10 px-2 py-0.5 text-xs font-medium text-royal">
-                      ⭐ Premium
-                    </span>
-                  </div>
-                  <p className="text-sm text-ink-soft">Psicóloga clínica · Ansiedade</p>
-                  <Link
-                    href="/profissionais/exemplo"
-                    className="mt-4 inline-block text-sm font-medium text-royal"
-                  >
-                    Ver perfil →
-                  </Link>
+            <div className="grid gap-5 sm:grid-cols-2">
+              {topics.map((t) => (
+                <div key={t.title} className="rounded-xl2 border border-navy-100 p-5 dark:border-white/10">
+                  <h3 className="font-display text-base font-medium text-navy dark:text-white">{t.title}</h3>
+                  <p className="mt-1.5 text-sm text-ink-soft">{t.desc}</p>
                 </div>
               ))}
             </div>
@@ -129,14 +153,86 @@ export default async function HomePage() {
         </section>
 
         {/* Como funciona */}
-        <section id="como-funciona" className="mx-auto max-w-6xl px-6 py-20">
-          <h2 className="font-display text-2xl font-semibold text-navy dark:text-white">Como funciona</h2>
-          <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((s, i) => (
-              <div key={s.title}>
-                <p className="font-display text-sm font-semibold text-royal">{String(i + 1).padStart(2, '0')}</p>
-                <h3 className="mt-2 font-display text-lg font-medium text-navy dark:text-white">{s.title}</h3>
-                <p className="mt-1 text-sm text-ink-soft">{s.desc}</p>
+        <section id="como-funciona" className="bg-surface-light py-20 dark:bg-white/5">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="max-w-xl">
+              <h2 className="font-display text-2xl font-semibold text-navy dark:text-white md:text-3xl">
+                Como começar seu cuidado emocional
+              </h2>
+              <p className="mt-3 text-ink-soft">
+                Você escolhe o profissional que mais combina com o seu momento. O processo é
+                simples, acolhedor e pensado para facilitar o primeiro passo.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {steps.map((s, i) => (
+                <div key={s.title}>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-royal font-display text-sm font-semibold text-white">
+                    {String(i + 1).padStart(2, '0')}
+                  </div>
+                  <h3 className="mt-4 font-display text-base font-medium text-navy dark:text-white">{s.title}</h3>
+                  <p className="mt-1.5 text-sm text-ink-soft">{s.desc}</p>
+                </div>
+              ))}
+            </div>
+            <Link
+              href="/profissionais"
+              className="mt-10 inline-block rounded-full bg-royal px-6 py-3 text-sm font-semibold text-white hover:bg-royal-700"
+            >
+              Ver profissionais disponíveis
+            </Link>
+          </div>
+        </section>
+
+        {/* CTA intermediário */}
+        <section className="bg-navy-900 py-16">
+          <div className="mx-auto flex max-w-3xl flex-col items-center px-6 text-center">
+            <MessageCircleHeart className="h-8 w-8 text-royal-400" />
+            <h2 className="mt-4 font-display text-2xl font-semibold text-white md:text-3xl">
+              Dê o primeiro passo com mais leveza
+            </h2>
+            <p className="mt-3 text-white/70">
+              Você não precisa ter todas as respostas agora. Comece escolhendo um profissional e
+              permita-se cuidar da sua saúde mental.
+            </p>
+            <Link
+              href="/profissionais"
+              className="mt-6 rounded-full bg-royal px-6 py-3 text-sm font-semibold text-white hover:bg-royal-700"
+            >
+              Encontrar profissional
+            </Link>
+          </div>
+        </section>
+
+        {/* Profissionais em destaque — placeholder, alimentado via API/admin */}
+        <section className="mx-auto max-w-6xl px-6 py-20">
+          <div className="flex items-center justify-between">
+            <h2 className="font-display text-2xl font-semibold text-navy dark:text-white">
+              Profissionais em destaque
+            </h2>
+            <Link href="/profissionais" className="text-sm font-medium text-royal">
+              Ver todos →
+            </Link>
+          </div>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="rounded-xl2 border border-navy-100 bg-white p-6 dark:border-white/10 dark:bg-navy-600">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-royal/10 font-display text-lg font-semibold text-royal">
+                  DR
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                  <p className="font-display font-medium text-navy dark:text-white">Nome do profissional</p>
+                  <span className="rounded-full bg-royal/10 px-2 py-0.5 text-xs font-medium text-royal">
+                    ⭐ Premium
+                  </span>
+                </div>
+                <p className="text-sm text-ink-soft">Psicóloga clínica · Ansiedade</p>
+                <Link
+                  href="/profissionais/exemplo"
+                  className="mt-4 inline-block text-sm font-medium text-royal"
+                >
+                  Ver perfil →
+                </Link>
               </div>
             ))}
           </div>
