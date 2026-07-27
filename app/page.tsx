@@ -3,21 +3,24 @@ import {
   Brain,
   Leaf,
   Sparkles,
-  Users,
-  ShieldCheck,
-  CalendarCheck,
   Heart,
   Frown,
-  MessageCircleHeart
+  MessageCircleHeart,
+  ArrowRight,
+  ShieldCheck,
+  Globe2,
+  Lock,
+  Video
 } from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
 import { getContent } from '@/lib/cms';
 import ptDefaults from '@/messages/pt.json';
 
-const trustPoints = [
-  { icon: Users, label: 'Profissionais qualificados' },
-  { icon: ShieldCheck, label: 'Atendimento seguro e sigiloso' },
-  { icon: CalendarCheck, label: 'Agendamento simples e rápido' }
+const trustCards = [
+  { icon: ShieldCheck, title: 'Profissionais verificados', desc: 'Registro conferido pela nossa equipe.' },
+  { icon: Globe2, title: 'Alcance internacional', desc: 'Conecte-se com profissionais em qualquer país.' },
+  { icon: Lock, title: 'Privado e seguro', desc: 'Seus dados e conversas protegidos.' },
+  { icon: Video, title: 'Sessões online', desc: 'Consultas por vídeo, no seu horário.' }
 ];
 
 const whyCareCards = [
@@ -42,11 +45,10 @@ const steps = [
 ];
 
 export default async function HomePage() {
-  const [headline, subheadline, ctaPrimary, ctaSecondary] = await Promise.all([
+  const [headline, subheadline, ctaPrimary] = await Promise.all([
     getContent('home.headline', 'pt', ptDefaults.home.headline),
     getContent('home.subheadline', 'pt', ptDefaults.home.subheadline),
-    getContent('home.ctaPrimary', 'pt', ptDefaults.home.ctaPrimary),
-    getContent('home.ctaSecondary', 'pt', ptDefaults.home.ctaSecondary)
+    getContent('home.ctaPrimary', 'pt', ptDefaults.home.ctaPrimary)
   ]);
 
   return (
@@ -55,56 +57,53 @@ export default async function HomePage() {
 
       <main>
         {/* Hero */}
-        <section className="relative overflow-hidden bg-white dark:bg-surface-dark">
-          <div className="relative mx-auto grid max-w-6xl gap-12 px-6 pb-28 pt-20 md:grid-cols-2 md:items-center md:py-28">
-            <div>
-              <p className="mb-5 inline-flex items-center gap-2 rounded-full bg-royal/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-royal-700">
-                <Heart className="h-3.5 w-3.5 fill-royal text-royal" /> Cuidar da mente é cuidar da vida
-              </p>
-              <h1 className="font-display text-4xl font-semibold leading-tight text-navy dark:text-white md:text-5xl">
-                {headline}
-              </h1>
-              <p className="mt-5 max-w-md text-base text-ink-soft">{subheadline}</p>
+        <section className="relative overflow-hidden bg-navy-50 dark:bg-surface-dark">
+          <div className="mx-auto max-w-6xl px-6 pb-16 pt-16 md:pt-20">
+            <div className="grid gap-12 md:grid-cols-2 md:items-center">
+              <div>
+                <p className="mb-5 inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-royal shadow-sm">
+                  <Heart className="h-3.5 w-3.5 fill-royal text-royal" /> Plataforma global de saúde mental
+                </p>
+                <h1 className="font-display text-4xl font-extrabold uppercase leading-tight text-navy dark:text-white md:text-5xl">
+                  {headline}
+                </h1>
+                <p className="mt-5 max-w-md text-base text-ink-soft">{subheadline}</p>
 
-              <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href="/profissionais"
-                  className="rounded-full bg-royal px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-royal/20 transition hover:bg-royal-700"
+                  className="mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-royal-400 to-royal-700 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-royal/25 transition hover:opacity-90"
                 >
-                  {ctaPrimary}
-                </Link>
-                <Link
-                  href="/cadastro"
-                  className="rounded-full border border-navy-100 px-6 py-3 text-sm font-semibold text-navy transition hover:bg-navy-50 dark:border-white/20 dark:text-white dark:hover:bg-white/10"
-                >
-                  {ctaSecondary}
+                  {ctaPrimary} <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
 
-              <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm text-ink-soft">
-                {trustPoints.map((t) => (
-                  <span key={t.label} className="flex items-center gap-2">
-                    <t.icon className="h-4 w-4 text-royal" /> {t.label}
-                  </span>
-                ))}
+              <div className="flex justify-center md:justify-end">
+                <div
+                  className="h-[340px] w-full max-w-md overflow-hidden shadow-xl md:h-[380px]"
+                  style={{ clipPath: 'ellipse(46% 42% at 50% 50%)' }}
+                >
+                  <img
+                    src="https://images.unsplash.com/photo-1758876203819-4cb3eec8e1aa?auto=format&fit=crop&w=900&q=80"
+                    alt="Profissional em sessão online"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="relative flex justify-center md:justify-end">
-              <img
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&q=80"
-                alt="Mulher sorrindo, transmitindo acolhimento"
-                className="h-[420px] w-full max-w-md rounded-3xl object-cover shadow-xl"
-              />
-              <div className="absolute -bottom-8 left-0 flex items-center gap-3 rounded-2xl bg-white px-5 py-4 shadow-lg md:-left-10">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-royal/10">
-                  <Heart className="h-4 w-4 fill-royal text-royal" />
-                </span>
-                <div>
-                  <p className="font-display text-sm font-semibold text-navy">Acolhimento que transforma</p>
-                  <p className="text-xs text-ink-soft">Você não precisa estar bem o tempo todo</p>
+            {/* Cartão de confiança */}
+            <div className="relative z-10 mt-12 grid grid-cols-2 gap-6 rounded-2xl bg-white p-6 shadow-xl sm:grid-cols-4 dark:bg-navy-600">
+              {trustCards.map((t) => (
+                <div key={t.title} className="flex items-start gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-royal/10">
+                    <t.icon className="h-5 w-5 text-royal" />
+                  </span>
+                  <div>
+                    <p className="font-display text-sm font-semibold text-navy dark:text-white">{t.title}</p>
+                    <p className="text-xs text-ink-soft">{t.desc}</p>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
