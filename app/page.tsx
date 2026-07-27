@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { SiteHeader } from '@/components/site-header';
-import { GlobalAvailabilityCard } from '@/components/global-availability-card';
 import { HeroIllustration } from '@/components/hero-illustration';
 import { getContent } from '@/lib/cms';
 import ptDefaults from '@/messages/pt.json';
@@ -35,51 +34,44 @@ export default async function HomePage() {
 
       <main>
         {/* Hero */}
-        <section className="relative overflow-hidden bg-navy-900">
-          <div
-            className="pointer-events-none absolute inset-0 opacity-60"
-            style={{
-              background:
-                'radial-gradient(60% 50% at 15% 20%, rgba(36,82,255,0.35), transparent), radial-gradient(50% 40% at 90% 10%, rgba(36,82,255,0.2), transparent)'
-            }}
-          />
-          <div className="relative mx-auto grid max-w-6xl gap-12 px-6 pb-32 pt-24 md:grid-cols-2 md:items-center md:py-32">
+        <section className="relative overflow-hidden bg-white dark:bg-surface-dark">
+          <div className="relative mx-auto grid max-w-6xl gap-12 px-6 pb-24 pt-20 md:grid-cols-2 md:items-center md:py-28">
             <div>
-              <p className="mb-4 inline-flex rounded-full border border-white/15 px-3 py-1 text-xs font-medium tracking-wide text-white/70">
-                Saúde mental, sem fronteiras
+              <p className="mb-5 inline-flex items-center gap-2 rounded-full bg-royal/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-royal-700">
+                <span className="text-royal">♥</span> Cuidar da mente é cuidar da vida
               </p>
-              <h1 className="font-display text-4xl font-semibold leading-tight text-white md:text-5xl">
+              <h1 className="font-display text-4xl font-semibold leading-tight text-navy dark:text-white md:text-5xl">
                 {headline}
               </h1>
-              <p className="mt-5 max-w-md text-base text-white/70">{subheadline}</p>
+              <p className="mt-5 max-w-md text-base text-ink-soft">{subheadline}</p>
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href="/profissionais"
-                  className="rounded-full bg-royal px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-royal/30 transition hover:bg-royal-700"
+                  className="rounded-full bg-royal px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-royal/20 transition hover:bg-royal-700"
                 >
                   {ctaPrimary}
                 </Link>
                 <Link
                   href="/cadastro"
-                  className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                  className="rounded-full border border-navy-100 px-6 py-3 text-sm font-semibold text-navy transition hover:bg-navy-50 dark:border-white/20 dark:text-white dark:hover:bg-white/10"
                 >
                   {ctaSecondary}
                 </Link>
               </div>
 
-              <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-xs text-white/60">
-                <span>★★★★★ &nbsp;avaliado por pacientes</span>
-                <span>Consulta por vídeo</span>
-                <span>PT · EN · ES · FR · IT</span>
+              <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm text-ink-soft">
+                <span className="flex items-center gap-2">
+                  <span className="text-royal">◍</span> Profissionais qualificados
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="text-royal">◍</span> Atendimento seguro e sigiloso
+                </span>
               </div>
             </div>
 
-            <div className="relative flex justify-center md:justify-end">
+            <div className="flex justify-center md:justify-end">
               <HeroIllustration />
-              <div className="absolute -bottom-10 -left-4 md:-left-16">
-                <GlobalAvailabilityCard />
-              </div>
             </div>
           </div>
         </section>
